@@ -51,13 +51,14 @@ CREATE TABLE "detalle_prestamo" (
                                     "prestamo_id" INT REFERENCES "prestamo" ("id") ON DELETE CASCADE
 );
 
-CREATE TABLE "multa" (
-                         "id" SERIAL PRIMARY KEY,
-                         "numero_multa" VARCHAR(50) UNIQUE NOT NULL,
-                         "fecha_emision" TIMESTAMP DEFAULT (NOW()),
-                         "monto_total" NUMERIC(10,2) NOT NULL,
-                         "pagado" BOOLEAN DEFAULT false,
-                         "prestamo_id" INT REFERENCES "prestamo" ("id") ON DELETE CASCADE
+CREATE TABLE multa (
+                       id SERIAL PRIMARY KEY,
+                       numero_multa VARCHAR(50) NOT NULL UNIQUE,
+                       fecha_emision TIMESTAMP,
+                       monto_total NUMERIC(10,2) NOT NULL,
+                       estado VARCHAR(50) NOT NULL CHECK (estado IN ('PAGADA', 'PENDIENTE', 'SIN_MULTA')),
+                       prestamo_id BIGINT UNIQUE REFERENCES prestamo(id) ON DELETE CASCADE,
+                       CONSTRAINT multa_estado_check CHECK (estado IN ('PAGADA', 'PENDIENTE', 'SIN_MULTA'))
 );
 
 CREATE TABLE "pago_multa" (

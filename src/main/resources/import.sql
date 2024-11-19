@@ -88,16 +88,16 @@ INSERT INTO detalle_prestamo (dias_prestamo, precio_por_dia, subtotal, libro_id,
 INSERT INTO detalle_prestamo (dias_prestamo, precio_por_dia, subtotal, libro_id, prestamo_id) VALUES (5, 3.00, 15.00, 5, 18);  -- El principito
 
 -- Multas
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision) VALUES ('M2024001', 25.00, 1, '2024-03-15 14:30:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision) VALUES ('M2024002', 15.00, 2, '2024-03-17 11:20:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, pagado, fecha_emision) VALUES ('M2024003', 30.00, 3, true, '2024-03-20 09:15:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision) VALUES ('M2024004', 10.00, 4, '2024-03-22 16:40:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, pagado, fecha_emision) VALUES ('M2024005', 5.00, 5, true, '2024-03-25 10:30:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision) VALUES ('M2024006', 20.00, 6, '2024-03-27 13:45:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, pagado, fecha_emision) VALUES ('M2024007', 35.00, 7, true, '2024-03-28 15:20:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision) VALUES ('M2024008', 15.00, 8, '2024-03-30 11:10:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, pagado, fecha_emision) VALUES ('M2024009', 25.00, 9, true, '2024-03-05 14:25:00');
-INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision) VALUES ('M2024010', 10.00, 10, '2024-03-10 16:50:00');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024001', 25.00, 1, '2024-03-15 14:30:00', 'PENDIENTE');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024002', 15.00, 2, '2024-03-17 11:20:00', 'PENDIENTE');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024004', 10.00, 4, '2024-03-22 16:40:00', 'PENDIENTE');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024006', 20.00, 6, '2024-03-27 13:45:00', 'PENDIENTE');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024008', 15.00, 8, '2024-03-30 11:10:00', 'PENDIENTE');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024010', 10.00, 10, '2024-03-10 16:50:00', 'PENDIENTE');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024003', 30.00, 3, '2024-03-20 09:15:00', 'PAGADA');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024005', 5.00, 5, '2024-03-25 10:30:00', 'PAGADA');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024007', 35.00, 7, '2024-03-28 15:20:00', 'PAGADA');
+INSERT INTO multa (numero_multa, monto_total, prestamo_id, fecha_emision, estado) VALUES ('M2024009', 25.00, 9, '2024-03-05 14:25:00', 'PAGADA');
 
 -- Pagos de Multas
 INSERT INTO pago_multa (monto, metodo_pago, multa_id, fecha) VALUES (25.00, 'Efectivo', 1, '2024-02-15 10:30:00');
