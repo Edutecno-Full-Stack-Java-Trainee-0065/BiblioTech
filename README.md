@@ -24,12 +24,12 @@ Utilizando el modelo relacional proporcionado, se requieren las siguientes consu
 
 ![Modelo Relacional](./docs/Untitled.png)
 
-1. Obtener el total de préstamos por usuario en el último mes, mostrando aquellos que han generado más de $50 en alquiler, ordenados por monto.
+1. Obtener el total de préstamos por usuario en el mes de marzo, mostrando aquellos que han generado más de $50 en alquiler, ordenados por monto.
 ```sql
 SELECT u.nombre, COUNT(p.id) as total_prestamos, SUM(p.total) as monto_total
 FROM usuario u
-JOIN prestamo p ON u.id = p.usuario_id
-WHERE p.fecha_prestamo >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
+        JOIN prestamo p ON u.id = p.usuario_id
+WHERE p.fecha_prestamo >= '2024-03-01' AND p.fecha_prestamo < '2024-04-01'
 GROUP BY u.id, u.nombre
 HAVING SUM(p.total) > 50
 ORDER BY monto_total DESC;
@@ -37,19 +37,25 @@ ORDER BY monto_total DESC;
 
 2. Listar libros con bajo stock (menos de 5 copias) junto con su editorial y género.
 ```sql
-SELECT l.titulo, l.copias_disponibles, e.nombre as editorial, g.nombre as genero
+SELECT
+   l.titulo,
+   l.copias_disponibles,
+   e.nombre as editorial,
+   g.nombre as genero,
+   l.precio_alquiler
 FROM libro l
-JOIN editorial e ON l.editorial_id = e.id
-JOIN genero_literario g ON l.genero_id = g.id
-WHERE l.copias_disponibles < 5;
+        JOIN editorial e ON l.editorial_id = e.id
+        JOIN genero_literario g ON l.genero_id = g.id
+WHERE l.copias_disponibles < 5
+ORDER BY l.copias_disponibles ASC;
 ```
 
 3. Mostrar multas pendientes de pago, incluyendo datos del usuario y monto adeudado.
 ```sql
 SELECT u.nombre, u.email, m.numero_multa, m.fecha_emision, m.monto_total
 FROM multa m
-JOIN prestamo p ON m.prestamo_id = p.id
-JOIN usuario u ON p.usuario_id = u.id
+        JOIN prestamo p ON m.prestamo_id = p.id
+        JOIN usuario u ON p.usuario_id = u.id
 WHERE m.pagado = false;
 ```
 
@@ -57,18 +63,27 @@ WHERE m.pagado = false;
 ```sql
 SELECT l.titulo, COUNT(dp.id) as total_prestamos, SUM(dp.subtotal) as monto_total
 FROM libro l
-JOIN detalle_prestamo dp ON l.id = dp.libro_id
+        JOIN detalle_prestamo dp ON l.id = dp.libro_id
 GROUP BY l.id, l.titulo
 ORDER BY total_prestamos DESC
 LIMIT 5;
 ```
 
-5. Mostrar resumen de pagos de multas por método de pago del último mes.
+5. Mostrar resumen de pagos de multas por método de pago del mes de marzo.
 ```sql
-SELECT pm.metodo_pago, COUNT(*) as num_transacciones, SUM(pm.monto) as monto_total
+SELECT
+   pm.metodo_pago,
+   COUNT(*) as num_transacciones,
+   SUM(pm.monto) as monto_total,
+   ROUND(AVG(pm.monto), 2) as monto_promedio,
+   MIN(pm.monto) as monto_minimo,
+   MAX(pm.monto) as monto_maximo,
+   COUNT(DISTINCT multa_id) as multas_distintas
 FROM pago_multa pm
-WHERE pm.fecha >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
-GROUP BY pm.metodo_pago;
+WHERE pm.fecha >= DATE_TRUNC('month', DATE '2024-03-01')
+  AND pm.fecha < DATE_TRUNC('month', DATE '2024-03-01' + INTERVAL '1 month')
+GROUP BY pm.metodo_pago
+ORDER BY monto_total DESC;
 ```
 
 ### Fase 2: Algoritmos en Java
