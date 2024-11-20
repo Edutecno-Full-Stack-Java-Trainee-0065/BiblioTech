@@ -124,7 +124,7 @@ public void calcularPrestamosPeriodo(Long usuarioId, int mes, int año) {
 ### Fase 3: Implementación de Vista y API REST
 
 #### Vista de Préstamos
-![Mockup de Vista de Préstamos](ruta_imagen)
+![Mockup de Vista de Préstamos](./docs/vistas.png)
 
 **Funcionalidades:**
 1. **Filtros:**

@@ -43,10 +43,15 @@ public class PrestamoMvcController {
             @RequestParam(defaultValue = "10") int size,
             Model model) {
 
+        EstadoMulta estadoMulta = null;
+        if (estado != null && !estado.isEmpty()) {
+            estadoMulta = EstadoMulta.valueOf(estado);
+        }
+
         PrestamoFiltroDTO filtro = PrestamoFiltroDTO.builder()
                 .fechaInicio(fechaInicio)
                 .fechaFin(fechaFin)
-                .estadoMulta(estado != null ? EstadoMulta.valueOf(estado) : null)
+                .estadoMulta(estadoMulta)
                 .build();
 
         // Usando el nombre de la propiedad Java en lugar del nombre de la columna
