@@ -90,34 +90,41 @@ ORDER BY monto_total DESC;
 
 1. **Sistema de Alertas de Stock**
 ```java
-public void verificarStockCritico(Long libroId) {
-    Libro libro = libroRepository.findById(libroId)
-        .orElseThrow(() -> new RuntimeException("Libro no encontrado"));
-    
-    int limiteMinimo = libro.getGenero().getNombre().equals("Académico") ? 8 : 5;
-    
-    if (libro.getCopiasDisponibles() < limiteMinimo) {
-        System.out.println("¡ALERTA! Stock crítico para: " + libro.getTitulo());
-        System.out.println("Copias disponibles: " + libro.getCopiasDisponibles());
-        System.out.println("Se requiere reposición inmediata");
-    }
+public static void verificarStockCritico(List<Libro> libros, Long libroId) {
+   Long id = 0L;
+   for (Libro libro : libros) {
+      if (libro.getId() == libroId) {
+         id = libro.getId();
+         break;
+      }
+   }
+
+   Libro libro = libros.get(Math.toIntExact(id));
+
+   if (libro.getCopiasDisponibles() < 5) {
+      System.out.println("¡ALERTA! Stock crítico para: " + libro.getTitulo());
+      System.out.println("Copias disponibles: " + libro.getCopiasDisponibles());
+      System.out.println("Se requiere reposición inmediata");
+   }
 }
 ```
 
 2. **Cálculo de Préstamos por Usuario**
 ```java
-public void calcularPrestamosPeriodo(Long usuarioId, int mes, int año) {
-    LocalDate inicio = LocalDate.of(año, mes, 1);
-    LocalDate fin = inicio.plusMonths(1).minusDays(1);
-    
-    List<Prestamo> prestamos = prestamoRepository
-        .findByUsuarioIdAndFechaBetween(usuarioId, inicio, fin);
-    
-    double total = prestamos.stream()
-        .mapToDouble(Prestamo::getTotal)
-        .sum();
-    
-    System.out.println("Total de préstamos: $" + total);
+public static void calcularPrestamosPeriodo(List<Prestamo> prestamos, Long usuarioId, int mes, int año) {
+   LocalDate inicio = LocalDate.of(año, mes, 1);
+   LocalDate fin = inicio.plusMonths(1).minusDays(1);
+
+   double total = prestamos.stream()
+           .filter(p -> p.getUsuario().getId().equals(usuarioId))
+           .filter(p -> {
+              LocalDate fechaPrestamo = p.getFechaPrestamo().toLocalDate();
+              return !fechaPrestamo.isBefore(inicio) && !fechaPrestamo.isAfter(fin);
+           })
+           .mapToDouble(p -> p.getTotal().doubleValue())
+           .sum();
+
+   System.out.println("Total de préstamos para " + mes + "/" + año + ": $" + total);
 }
 ```
 
